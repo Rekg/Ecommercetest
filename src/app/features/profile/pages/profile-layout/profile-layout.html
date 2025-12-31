@@ -1,0 +1,36 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 font-['Outfit']">
+      <div class="flex flex-col md:flex-row gap-8">
+        
+        <aside class="w-full md:w-64 space-y-2">
+          <div class="p-6 bg-white rounded-2xl shadow-sm border border-gray-100 mb-6">
+            <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-2xl font-black mb-4">
+              {{ authService.currentUser()?.firstName?.charAt(0) }}
+            </div>
+            <h2 class="text-xl font-bold text-gray-900 leading-tight">
+              {{ authService.currentUser()?.firstName }} {{ authService.currentUser()?.lastName }}
+            </h2>
+            <p class="text-sm text-gray-500 truncate">{{ authService.currentUser()?.email }}</p>
+          </div>
+
+          <nav class="space-y-1">
+            <a routerLink="./info" routerLinkActive="bg-indigo-50 text-indigo-600 border-indigo-200"
+               class="flex items-center gap-3 px-4 py-3 text-sm font-bold text-gray-600 rounded-xl border border-transparent hover:bg-gray-50 transition">
+              <span>👤</span> Personal Info
+            </a>
+            <a routerLink="./addresses" routerLinkActive="bg-indigo-50 text-indigo-600 border-indigo-200"
+               class="flex items-center gap-3 px-4 py-3 text-sm font-bold text-gray-600 rounded-xl border border-transparent hover:bg-gray-50 transition">
+              <span>📍</span> Saved Addresses
+            </a>
+            <a routerLink="./payments" routerLinkActive="bg-indigo-50 text-indigo-600 border-indigo-200"
+               class="flex items-center gap-3 px-4 py-3 text-sm font-bold text-gray-600 rounded-xl border border-transparent hover:bg-gray-50 transition">
+              <span>💳</span> Payment Methods
+            </a>
+          </nav>
+        </aside>
+
+        <main class="flex-1 bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+          <router-outlet></router-outlet>
+        </main>
+        
+      </div>
+    </div>

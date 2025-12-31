@@ -1,0 +1,126 @@
+<div class="container mx-auto p-6 max-w-5xl font-['Outfit']">
+      <div class="flex flex-col items-center mb-12">
+        <h1 class="text-4xl font-black text-gray-900 mb-6">Checkout</h1>
+        <div class="flex items-center w-full max-w-md justify-between relative">
+          <div class="absolute top-1/2 left-0 w-full h-0.5 bg-gray-100 -translate-y-1/2 -z-10"></div>
+          <div *ngFor="let step of [1, 2, 3, 4]" 
+               [class]="'w-10 h-10 rounded-full flex items-center justify-center font-black transition-all duration-500 ' + 
+               (currentStep() >= step ? 'bg-indigo-600 text-white shadow-lg' : 'bg-white text-gray-300 border-2 border-gray-100')">
+            {{ step }}
+          </div>
+        </div>
+        <div class="flex w-full max-w-md justify-between mt-2 px-1">
+           <span class="text-[10px] font-black uppercase tracking-widest" [class.text-indigo-600]="currentStep() >= 1">Shipping</span>
+           <span class="text-[10px] font-black uppercase tracking-widest" [class.text-indigo-600]="currentStep() >= 2">Billing</span>
+           <span class="text-[10px] font-black uppercase tracking-widest" [class.text-indigo-600]="currentStep() >= 3">Payment</span>
+           <span class="text-[10px] font-black uppercase tracking-widest" [class.text-indigo-600]="currentStep() >= 4">Review</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <div class="lg:col-span-2">
+          <form [formGroup]="checkoutForm" class="space-y-6">
+            <div *ngIf="currentStep() === 1" class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
+              <h2 class="text-2xl font-black mb-6">Shipping Address</h2>
+              <div class="grid grid-cols-2 gap-4" formGroupName="shippingAddress">
+                <input formControlName="street" placeholder="Street Address" class="col-span-2 p-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-indigo-500" />
+                <input formControlName="city" placeholder="City" class="p-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-indigo-500" />
+                <input formControlName="state" placeholder="State" class="p-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-indigo-500" />
+                <input formControlName="zip" placeholder="Zip Code" class="p-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-indigo-500" />
+                <input formControlName="country" placeholder="Country" class="p-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-indigo-500" />
+              </div>
+              <button type="button" (click)="nextStep()" [disabled]="checkoutForm.get('shippingAddress')?.invalid"
+                      class="w-full mt-8 py-5 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-700 transition">
+                Continue to Billing
+              </button>
+            </div>
+
+            <div *ngIf="currentStep() === 2" class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
+              <h2 class="text-2xl font-black mb-6">Billing Address</h2>
+              <label class="flex items-center space-x-3 mb-6 p-4 bg-indigo-50 rounded-2xl cursor-pointer">
+                <input type="checkbox" (change)="syncAddresses($event)" class="w-5 h-5 rounded border-gray-300 text-indigo-600">
+                <span class="font-bold text-indigo-900">Same as shipping address</span>
+              </label>
+              <div class="grid grid-cols-2 gap-4" formGroupName="billingAddress">
+                <input formControlName="street" placeholder="Street Address" class="col-span-2 p-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-indigo-500" />
+                <input formControlName="city" placeholder="City" class="p-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-indigo-500" />
+                <input formControlName="state" placeholder="State" class="p-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-indigo-500" />
+                <input formControlName="zip" placeholder="Zip Code" class="p-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-indigo-500" />
+                <input formControlName="country" placeholder="Country" class="p-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-indigo-500" />
+              </div>
+              <div class="flex gap-4 mt-8">
+                <button type="button" (click)="prevStep()" class="flex-1 py-5 bg-gray-100 text-gray-600 font-black rounded-2xl">Back</button>
+                <button type="button" (click)="nextStep()" [disabled]="checkoutForm.get('billingAddress')?.invalid" class="flex-1 py-5 bg-indigo-600 text-white font-black rounded-2xl">Next: Payment</button>
+              </div>
+            </div>
+
+            <div *ngIf="currentStep() === 3" class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
+              <h2 class="text-2xl font-black mb-6">Payment Method</h2>
+              <div formGroupName="payment" class="space-y-4">
+                <select formControlName="method" class="w-full p-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-indigo-500 font-bold">
+                  <option value="CREDIT_CARD">Credit Card / Debit Card</option>
+                  <option value="CASH_ON_DELIVERY">Cash on Delivery</option>
+                </select>
+                <div *ngIf="checkoutForm.get('payment.method')?.value === 'CREDIT_CARD'" class="space-y-4 pt-4">
+                  <input formControlName="cardNumber" placeholder="Card Number" class="w-full p-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-indigo-500" />
+                  <div class="grid grid-cols-2 gap-4">
+                    <input formControlName="expiry" placeholder="MM/YY" class="p-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-indigo-500" />
+                    <input formControlName="cvv" placeholder="CVV" class="p-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-indigo-500" />
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-4 mt-8">
+                <button type="button" (click)="prevStep()" class="flex-1 py-5 bg-gray-100 text-gray-600 font-black rounded-2xl">Back</button>
+                <button type="button" (click)="nextStep()" class="flex-1 py-5 bg-indigo-600 text-white font-black rounded-2xl">Review Order</button>
+              </div>
+            </div>
+
+            <div *ngIf="currentStep() === 4" class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
+              <h2 class="text-2xl font-black mb-6">Final Review</h2>
+              <div class="space-y-3 mb-8">
+                <div class="flex justify-between p-4 bg-gray-50 rounded-2xl">
+                  <span class="text-gray-400 font-bold text-xs uppercase">Deliver To</span>
+                  <span class="font-black text-gray-900">{{ checkoutForm.value.shippingAddress?.city }}, {{ checkoutForm.value.shippingAddress?.country }}</span>
+                </div>
+                <div class="flex justify-between p-4 bg-gray-50 rounded-2xl">
+                  <span class="text-gray-400 font-bold text-xs uppercase">Payment</span>
+                  <span class="font-black text-gray-900">{{ checkoutForm.get('payment.method')?.value }}</span>
+                </div>
+              </div>
+              <div class="flex gap-4 mt-8">
+                <button type="button" (click)="prevStep()" [disabled]="isProcessing()" class="flex-1 py-5 bg-gray-100 text-gray-600 font-black rounded-2xl">Edit</button>
+                <button type="button" (click)="processFinalOrder()" [disabled]="isProcessing()"
+                        class="flex-[2] py-5 bg-indigo-900 text-white font-black rounded-2xl hover:bg-black transition-all shadow-xl active:scale-95">
+                  {{ isProcessing() ? 'Processing...' : 'Place Order Now' }}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="lg:col-span-1">
+          <div class="bg-gray-900 text-white p-8 rounded-[2.5rem] sticky top-24 shadow-2xl">
+            <h3 class="font-black mb-6 uppercase text-[10px] tracking-[0.2em] text-indigo-400">Order Summary</h3>
+            <div class="space-y-4 mb-8 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
+              
+              <div *ngFor="let item of cartItems$ | async" class="flex justify-between items-start gap-4 text-sm w-full">
+                <div class="min-w-0 flex-1"> <p class="font-black leading-tight break-words">{{ item.productName }}</p>
+                  <p class="text-indigo-400 text-xs mt-1">Qty: {{ item.quantity }}</p>
+                </div>
+                <div class="flex-shrink-0 text-right">
+                  <span class="font-bold whitespace-nowrap">ETB {{ item.subtotal | number:'1.2-2' }}</span>
+                </div>
+              </div>
+              </div>
+            <div *ngIf="totals$ | async as totals" class="pt-6 border-t border-white/10 space-y-3">
+              <div class="flex justify-between text-xs font-bold text-gray-400"><span>Subtotal</span><span>ETB {{ totals.totalPrice | number:'1.2-2' }}</span></div>
+              <div class="flex justify-between text-xs font-bold text-gray-400"><span>Tax (VAT)</span><span>ETB {{ totals.tax | number:'1.2-2' }}</span></div>
+              <div class="flex justify-between items-end pt-2">
+                <span class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Total</span>
+                <span class="text-3xl font-black">ETB {{ (totals.totalPrice + totals.tax) | number:'1.2-2' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

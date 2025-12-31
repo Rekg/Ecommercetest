@@ -1,0 +1,93 @@
+<div class="min-h-screen bg-white font-['Outfit']">
+      <div class="max-w-7xl mx-auto px-6 py-8">
+        <button routerLink="/products" class="group flex items-center gap-2 text-gray-400 font-bold hover:text-indigo-600 transition-all uppercase text-[10px] tracking-[0.2em]">
+          <span class="transform group-hover:-translate-x-1 transition-transform">←</span> Back to Collection
+        </button>
+      </div>
+
+      <div *ngIf="isLoading" class="flex justify-center py-20">
+        <app-loading-spinner />
+      </div>
+
+      <main *ngIf="product && !isLoading" class="max-w-7xl mx-auto px-6 pb-20">
+        <div class="flex flex-col lg:flex-row gap-16">
+          
+          <div class="lg:w-[55%]">
+            <div class="bg-gray-50 rounded-[2.5rem] aspect-square p-12 flex items-center justify-center sticky top-12 border border-gray-100/50">
+              <img [src]="apiUrl + product.imageUrl" 
+                   [alt]="product.name"
+                   class="w-full h-auto max-h-[550px] object-contain drop-shadow-2xl" />
+            </div>
+          </div>
+
+          <div class="lg:w-[45%] flex flex-col pt-4">
+            <div class="flex items-center justify-between mb-6">
+              <span class="px-4 py-1.5 bg-indigo-50 text-indigo-600 rounded-full text-[11px] font-black uppercase tracking-widest border border-indigo-100/50">
+                {{ product.categoryName || 'General Product' }}
+              </span>
+              <span *ngIf="product.stockQuantity > 0" class="flex items-center gap-1.5 text-emerald-600 text-[11px] font-bold uppercase tracking-wider">
+                <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span> In Stock
+              </span>
+            </div>
+
+            <h1 class="text-5xl font-black text-gray-900 leading-[1.1] mb-4 tracking-tight">
+              {{ product.name }}
+            </h1>
+
+            <div class="flex items-baseline gap-2 mb-8">
+              <span class="text-4xl font-black text-indigo-600 tracking-tighter">
+                ETB {{ product.price | number:'1.2-2' }}
+              </span>
+            </div>
+
+            <p class="text-gray-500 leading-relaxed mb-10 text-lg font-light">
+              {{ product.description || 'No description provided for this item.' }}
+            </p>
+
+            <div class="space-y-4 mb-12">
+              <div *ngIf="product.size || product.color || product.weight" class="grid grid-cols-2 gap-3">
+                
+                <div *ngIf="product.size" class="p-4 bg-gray-50/50 rounded-2xl border border-gray-100">
+                  <span class="block text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Size</span>
+                  <span class="text-gray-900 font-bold text-sm">{{ product.size }}</span>
+                </div>
+
+                <div *ngIf="product.weight" class="p-4 bg-gray-50/50 rounded-2xl border border-gray-100">
+                  <span class="block text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Weight</span>
+                  <span class="text-gray-900 font-bold text-sm">{{ product.weight }}</span>
+                </div>
+
+                <div *ngIf="product.color" class="p-4 bg-gray-50/50 rounded-2xl border border-gray-100 col-span-2 flex items-center justify-between">
+                  <div>
+                    <span class="block text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Color Finish</span>
+                    <span class="text-gray-900 font-bold text-sm uppercase">{{ product.color }}</span>
+                  </div>
+                  <div class="w-8 h-8 rounded-lg border-2 border-white shadow-sm" [style.backgroundColor]="product.color"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-auto space-y-4">
+              <button 
+                (click)="addToCart()" 
+                [disabled]="product.stockQuantity <= 0"
+                class="w-full bg-indigo-50 text-indigo-600 border border-indigo-100 py-6 rounded-2xl font-black hover:bg-indigo-600 hover:text-white transition-all active:scale-[0.98] uppercase text-[11px] tracking-[0.2em] disabled:opacity-50 disabled:bg-gray-50 disabled:text-gray-300"
+              >
+                {{ product.stockQuantity > 0 ? 'Add to Shopping Bag' : 'Out of Stock' }}
+              </button>
+
+              <div *ngIf="isAdmin()" class="grid grid-cols-2 gap-3 pt-4 border-t border-gray-100">
+                <button [routerLink]="['/products/edit', product.id]" 
+                        class="py-4 bg-white text-amber-600 border border-amber-100 rounded-2xl font-bold uppercase text-[9px] tracking-widest hover:bg-amber-50 transition-colors">
+                  Edit Product
+                </button>
+                <button (click)="onDelete()" 
+                        class="py-4 bg-white text-red-600 border border-red-100 rounded-2xl font-bold uppercase text-[9px] tracking-widest hover:bg-red-50 transition-colors">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>

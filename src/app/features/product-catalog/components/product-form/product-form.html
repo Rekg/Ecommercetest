@@ -1,0 +1,113 @@
+<div class="max-w-6xl mx-auto p-4 md:p-6 bg-gray-50 min-h-screen">
+      <form *ngIf="productForm" [formGroup]="productForm" (ngSubmit)="onSubmit()" class="flex flex-col lg:flex-row gap-6 items-start">
+        
+        <div class="w-full lg:w-80 shrink-0 lg:sticky lg:top-6 order-2 lg:order-1">
+          <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="aspect-square bg-gray-50 flex items-center justify-center p-6">
+              <img [src]="getImageUrl(previewImageUrl)" class="max-w-full max-h-full object-contain" alt="Preview" />
+            </div>
+            <div class="p-6 space-y-4">
+              <h3 class="text-xl font-bold text-gray-900 truncate">{{ productForm.get('name')?.value || 'Product Name' }}</h3>
+              <div class="text-2xl font-black text-indigo-600">ETB {{ productForm.get('price')?.value || '0.00' }}</div>
+              
+              <div class="flex flex-wrap gap-2 pt-2">
+                <span class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-bold uppercase">{{ productForm.get('size')?.value || 'No Size' }}</span>
+                <div class="w-6 h-6 rounded-full border border-gray-200 shadow-sm" [style.backgroundColor]="productForm.get('color')?.value"></div>
+              </div>
+
+              <div class="flex gap-2 pt-4">
+                <button type="submit" [disabled]="productForm.invalid || isUploading" class="w-full py-4 text-sm font-bold text-white bg-indigo-600 rounded-2xl hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition disabled:opacity-50">
+                  {{ isUploading ? 'Uploading...' : (initialProduct?.id ? 'Save Changes' : 'Create Product') }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-grow space-y-6 order-1 lg:order-2 w-full">
+          <div class="bg-white p-6 md:p-8 rounded-3xl border-2 border-dashed border-gray-200 text-center">
+             <label class="cursor-pointer block">
+                <div class="flex flex-col items-center justify-center">
+                  <div class="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center mb-3">
+                    <svg class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                  </div>
+                  <span class="bg-indigo-600 text-white px-8 py-2 rounded-full font-bold text-sm mb-2">Upload Photo</span>
+                  <p class="text-gray-900 font-bold text-sm">Drop images here or click to browse</p>
+                </div>
+                <input type="file" (change)="onFileSelected($event)" accept="image/*" class="hidden" />
+             </label>
+          </div>
+
+          <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100">
+            <h4 class="font-bold text-gray-800 mb-6 text-lg">Product Information</h4>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div class="space-y-1">
+                <label class="text-xs font-bold text-gray-500 uppercase">Product Name</label>
+                <input formControlName="name" placeholder="Items Name" class="w-full h-[50px] px-4 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50/30" />
+              </div>
+              <div class="space-y-1">
+                <label class="text-xs font-bold text-gray-500 uppercase">Category</label>
+                <div class="flex items-center gap-2 w-full">
+                  <select formControlName="categoryId" class="flex-1 h-[50px] px-4 rounded-xl border border-gray-200 bg-gray-50/30 outline-none appearance-none cursor-pointer min-w-0">
+                    <option [value]="null">Choose a category</option>
+                    <option *ngFor="let cat of categories()" [value]="cat.id">{{ cat.name }}</option>
+                  </select>
+                  <button (click)="onQuickAddCategory()" type="button" 
+                    class="h-[50px] w-[50px] flex items-center justify-center bg-indigo-50 text-indigo-600 rounded-xl font-bold text-2xl hover:bg-indigo-100 transition flex-shrink-0 border border-indigo-100">
+                    +
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div class="space-y-1">
+                <label class="text-xs font-bold text-gray-500 uppercase">Price (ETB)</label>
+                <input type="number" formControlName="price" class="w-full h-[50px] px-4 rounded-xl border border-gray-200 bg-gray-50/30 outline-none" />
+              </div>
+              <div class="space-y-1">
+                <label class="text-xs font-bold text-gray-500 uppercase">Stock</label>
+                <input type="number" formControlName="stockQuantity" class="w-full h-[50px] px-4 rounded-xl border border-gray-200 bg-gray-50/30 outline-none" />
+              </div>
+              <div class="space-y-1">
+                <label class="text-xs font-bold text-gray-500 uppercase">Weight</label>
+                <input formControlName="weight" placeholder="Gm & kg" class="w-full h-[50px] px-4 rounded-xl border border-gray-200 bg-gray-50/30 outline-none" />
+              </div>
+            </div>
+
+            <div class="mb-8">
+              <label class="text-xs font-bold text-gray-500 uppercase block mb-3">Size Selection</label>
+              <div class="flex flex-wrap gap-2">
+                <button *ngFor="let s of sizeOptions" 
+                        type="button" 
+                        (click)="setSize(s)"
+                        [class.bg-indigo-600]="productForm.get('size')?.value === s"
+                        [class.text-white]="productForm.get('size')?.value === s"
+                        class="px-5 py-2.5 rounded-lg border border-gray-200 font-bold text-sm hover:border-indigo-400 transition bg-white text-gray-600">
+                  {{ s }}
+                </button>
+                <input formControlName="size" placeholder="Other..." class="px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none w-32 focus:ring-1 focus:ring-indigo-500" />
+              </div>
+            </div>
+
+            <div class="mb-8">
+              <label class="text-xs font-bold text-gray-500 uppercase block mb-3">Color</label>
+              <div class="flex items-center gap-4">
+                <div class="relative w-12 h-12 rounded-xl overflow-hidden border border-gray-200 shadow-sm flex-shrink-0">
+                  <input type="color" formControlName="color" class="absolute inset-0 w-[200%] h-[200%] -top-1/2 -left-1/2 cursor-pointer border-none" />
+                </div>
+                <div class="px-4 py-2 bg-gray-50 border border-gray-100 rounded-lg">
+                    <span class="text-sm font-mono text-gray-600 uppercase font-bold">{{ productForm.get('color')?.value || '#4f46e5' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-gray-500 uppercase">Description</label>
+              <textarea formControlName="description" rows="3" placeholder="Short description about the product" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/30 outline-none resize-none"></textarea>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>

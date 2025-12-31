@@ -1,0 +1,101 @@
+<div class="container mx-auto p-6 max-w-6xl font-['Outfit']">
+      <a [routerLink]="['/products']"
+        class="flex items-center space-x-1 text-indigo-600 hover:text-indigo-800 mb-6 transition font-medium uppercase text-[10px] tracking-widest">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        <span>Continue Shopping</span>
+      </a>
+
+      <h1 class="text-4xl font-black text-gray-900 mb-8">Shopping Cart</h1>
+
+      <ng-container *ngIf="items$ | async as items">
+        <div *ngIf="items.length === 0" class="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
+          <p class="text-2xl font-bold text-gray-400 mb-4">Your cart feels a bit lonely... 🛒</p>
+          <a [routerLink]="['/products']" class="bg-indigo-600 text-white px-8 py-3 rounded-2xl font-black hover:bg-indigo-700 transition shadow-lg inline-block uppercase text-xs tracking-widest">
+            Browse Products
+          </a>
+        </div>
+
+        <div *ngIf="items.length > 0" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-2 space-y-4">
+            <div *ngFor="let item of items" class="flex items-center bg-white p-5 rounded-3xl shadow-sm border border-gray-100 hover:border-indigo-200 transition">
+              
+              <div class="w-24 h-24 bg-gray-50 rounded-2xl border border-gray-100 flex items-center justify-center p-2">
+                 <img *ngIf="item.imageUrl" [src]="item.imageUrl" class="max-w-full max-h-full object-contain" />
+                 <svg *ngIf="!item.imageUrl" class="w-12 h-12 text-gray-200" fill="currentColor" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+              </div>
+
+              <div class="flex-grow ml-6">
+                <a [routerLink]="['/products', item.productId]" class="text-lg font-black text-gray-800 hover:text-indigo-600 line-clamp-1">
+                  {{ item.productName }}
+                </a>
+                <p class="text-sm font-bold text-indigo-600 mt-1">ETB {{ item.price | number : '1.2-2' }}</p>
+              </div>
+
+              <div class="flex items-center bg-gray-50 rounded-xl px-2 py-1 mx-4 border border-gray-100">
+                <button (click)="decrementQuantity(item)" class="p-1 text-gray-400 hover:text-indigo-600 disabled:opacity-30" [disabled]="item.quantity <= 1">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+                </button>
+                <span class="w-10 text-center font-black text-gray-900">{{ item.quantity }}</span>
+                <button (click)="incrementQuantity(item)" class="p-1 text-gray-400 hover:text-indigo-600">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                </button>
+              </div>
+
+              <div class="text-right w-32">
+                <p class="text-xl font-black text-gray-900">ETB {{ item.subtotal | number : '1.2-2' }}</p>
+              </div>
+
+              <button (click)="removeItem(item.id)" class="ml-4 p-2 text-gray-300 hover:text-red-500 transition hover:bg-red-50 rounded-xl">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+              </button>
+            </div>
+
+            <button (click)="clearCart()" class="text-[10px] font-black text-gray-400 hover:text-red-600 transition flex items-center gap-1 mt-4 uppercase tracking-widest">
+              🗑️ Clear Entire Cart
+            </button>
+          </div>
+
+          <div class="lg:col-span-1">
+            <div class="bg-indigo-900 p-8 rounded-[2rem] shadow-2xl sticky top-24 text-white border border-white/10" *ngIf="totals$ | async as totals">
+              <h2 class="text-2xl font-black mb-8 uppercase tracking-tight">Order Summary</h2>
+              
+              <div class="space-y-5">
+                <div class="flex justify-between text-indigo-200 font-medium">
+                  <span>Subtotal ({{ totalQuantity$ | async }} items)</span>
+                  <span class="text-white">ETB {{ totals.totalPrice | number : '1.2-2' }}</span>
+                </div>
+                
+                <div class="flex justify-between text-indigo-200 font-medium">
+                  <span>Tax (Included)</span>
+                  <span class="text-white">ETB {{ totals.tax | number : '1.2-2' }}</span>
+                </div>
+
+                <div class="pt-5 border-t border-indigo-800/50">
+                  <div class="flex justify-between items-end">
+                    <span class="text-indigo-300 text-xs font-black uppercase tracking-widest">Total Amount</span>
+                    <span class="text-3xl font-black text-white leading-none">ETB {{ (totals.totalPrice + totals.tax) | number : '1.2-2' }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <button 
+                (click)="onCheckout()" 
+                [disabled]="isProcessing()"
+                class="w-full mt-10 py-5 bg-white text-indigo-900 font-black rounded-2xl hover:bg-indigo-50 transition-all shadow-xl active:scale-[0.98] disabled:bg-indigo-800 disabled:text-indigo-400 uppercase text-xs tracking-widest"
+              >
+                <span *ngIf="!isProcessing()">Proceed to Checkout</span>
+                <span *ngIf="isProcessing()" class="flex items-center justify-center gap-2">
+                  <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Processing...
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>

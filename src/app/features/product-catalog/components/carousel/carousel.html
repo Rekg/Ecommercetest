@@ -1,0 +1,29 @@
+<section class="relative w-full h-[500px] md:h-[700px] overflow-hidden group">
+      @for (slide of slides; track $index) {
+        <div 
+          class="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+          [class.opacity-100]="currentSlide() === $index"
+          [class.opacity-0]="currentSlide() !== $index"
+        >
+          <img 
+            [src]="slide.url" 
+            class="w-full h-full object-cover transition-transform duration-[5000ms] ease-out" 
+            [class.scale-110]="currentSlide() === $index"
+            [alt]="slide.title"
+          >
+          
+          <div class="absolute inset-0 bg-black/20 flex flex-col items-center justify-center text-center p-6">
+            <h2 class="text-white text-5xl md:text-7xl font-black mb-4 drop-shadow-2xl uppercase tracking-tighter">
+              {{ slide.title }}
+            </h2>
+            <p class="text-white text-lg md:text-2xl font-bold mb-10 max-w-2xl drop-shadow-lg">
+              {{ slide.desc }}
+            </p>
+            <button class="px-14 py-4 bg-white text-black font-['Outfit'] font-black rounded-md hover:bg-gray-100 transition-all active:scale-95 shadow-2xl uppercase tracking-widest text-sm">
+              Order Now
+            </button>
+          </div>
+        </div>
+      }
+
+      </section>
