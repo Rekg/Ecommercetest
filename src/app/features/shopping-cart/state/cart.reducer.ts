@@ -23,13 +23,13 @@ export const initialState: CartState = {
 export const cartReducer = createReducer(
   initialState,
 
-  // Set loading to true when a request starts
+  
   on(CartActions.fetchCartRequest, (state) => ({ 
     ...state, 
     loading: true 
   })),
 
-  // Handle all Success actions (Update state with data from Backend)
+  
   on(
     CartActions.fetchCartSuccess,
     CartActions.addToCartSuccess,
@@ -46,7 +46,7 @@ export const cartReducer = createReducer(
     })
   ),
 
-  // Handle Errors
+  
   on(
     CartActions.fetchCartFailure,
     CartActions.addToCartFailure,
@@ -57,7 +57,7 @@ export const cartReducer = createReducer(
     })
   ),
 
-  // Reset state on Logout or Clear
+  
   on(CartActions.clearCartSuccess, () => initialState),
   on(CartActions.resetCartState, () => initialState)
 );

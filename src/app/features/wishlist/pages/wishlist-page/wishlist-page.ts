@@ -5,12 +5,12 @@ import { Observable } from 'rxjs';
 import { WishlistStateService } from '../../services/wishlist-state.service';
 import { Product } from '../../../../core/models/product.model';
 import { ToastService } from '../../../../core/services/toast.service';
-import { RouterModule } from '@angular/router'; // NEW: Import RouterModule for [routerLink]
+import { RouterModule } from '@angular/router'; 
 
 @Component({
   standalone: true,
   selector: 'app-wishlist-page',
-  imports: [CommonModule, NgOptimizedImage, CurrencyPipe, RouterModule], // ADDED: RouterModule
+  imports: [CommonModule, NgOptimizedImage, CurrencyPipe, RouterModule], 
   templateUrl: './wishlist-page.html',
 })
 export class Wishlist {
@@ -20,14 +20,14 @@ export class Wishlist {
   public wishlist$: Observable<Product[]> = this.wishlistService.wishlist$;
 
   moveItemToCart(product: Product): void {
-    // Toast is handled inside WishlistStateService
+    
     this.wishlistService.moveItemToCart(product);
   }
 
   removeItem(id: number, title: string): void {
     if (confirm(`Remove "${title}" from wishlist?`)) {
-      this.wishlistService.removeItem(id); // TOAST HANDLED INTERNALLY by the component
-      this.toastService.info(`💔 "${title}" removed.`);
+      this.wishlistService.removeItem(id); 
+      this.toastService.info(` "${title}" removed from wishlist.`);
     }
   }
 

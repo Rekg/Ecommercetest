@@ -17,9 +17,7 @@ export class CartApiService {
     return this.http.get<Cart>(this.baseUrl);
   }
 
-  /**
-   * POST: Uses productId because the CartItem doesn't exist yet
-   */
+  
   addItem(productId: number, quantity: number): Observable<Cart> {
     return this.http.post<Cart>(
       `${this.baseUrl}/add`, 
@@ -28,24 +26,20 @@ export class CartApiService {
     );
   }
 
-  /**
-   * PUT: Matches UpdateCartItemRequest.java (cartItemId)
-   */
+  
   updateItem(cartItemId: number, quantity: number): Observable<Cart> {
     return this.http.put<Cart>(
       `${this.baseUrl}/update`, 
-      { cartItemId, quantity }, // Changed key to cartItemId
+      { cartItemId, quantity }, 
       this.httpOptions
     );
   }
 
-  /**
-   * DELETE: Matches RemoveCartItemRequest.java (cartItemId)
-   */
+  
   removeItem(cartItemId: number): Observable<Cart> {
     return this.http.delete<Cart>(`${this.baseUrl}/remove`, {
       ...this.httpOptions,
-      body: { cartItemId } // Changed key to cartItemId
+      body: { cartItemId } 
     });
   }
 

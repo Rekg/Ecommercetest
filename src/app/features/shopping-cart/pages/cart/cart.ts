@@ -72,7 +72,7 @@ export class CartPage {
     return;
   }
 
-  // Simply go to the checkout form page
+  
   this.router.navigate(['/checkout']);
 }
 }

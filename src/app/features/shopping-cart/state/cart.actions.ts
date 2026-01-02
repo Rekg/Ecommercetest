@@ -1,4 +1,4 @@
-// src/app/features/shopping-cart/state/cart.actions.ts
+
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { Cart } from '../../../core/models/cart.model';
 
@@ -25,6 +25,6 @@ export const CartActions = createActionGroup({
     'Clear Cart Success': emptyProps(),
     'Clear Cart Failure': props<{ error: string }>(),
     
-    'Reset Cart State': emptyProps() // Used when logging out
+    'Reset Cart State': emptyProps() 
   }
 });

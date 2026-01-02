@@ -18,7 +18,7 @@ export class OrderApiService {
     return this.http.get<any>(`${this.baseUrl}/history`).pipe(
       map(response => {
         if (!response) return [];
-        // If it's a single object (the "one order" issue), wrap it in an array
+        
         return Array.isArray(response) ? response : [response];
       })
     );

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 interface Address {
   id: number;
-  type: string; // Home, Work, etc.
+  type: string; 
   street: string;
   city: string;
   isDefault: boolean;
@@ -18,7 +18,7 @@ interface Address {
 export class AddressesComponent {
   showForm = signal(false);
   
-  // Local state for Demo
+  
   addresses = signal<Address[]>([
     { id: 1, type: 'Home', street: '123 Tech Lane', city: 'San Francisco', isDefault: true },
     { id: 2, type: 'Office', street: '456 Corporate Way', city: 'New York', isDefault: false }

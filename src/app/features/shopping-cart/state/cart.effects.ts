@@ -1,8 +1,8 @@
-// src/app/features/shopping-cart/state/cart.effects.ts
+
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, of, tap } from 'rxjs';
-import { CartApiService } from '../../api/cart-api.service'; // Adjusted for your path
+import { CartApiService } from '../../api/cart-api.service'; // 
 import { CartActions } from './cart.actions';
 import { ToastService } from '../../../core/services/toast.service';
 

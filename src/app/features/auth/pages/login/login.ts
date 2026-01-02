@@ -22,7 +22,7 @@ export class LoginComponent {
     this.isLoading.set(true);
     this.authService.login(this.loginData).subscribe({
       next: () => {
-        this.toast.success('Login successful! 🚀');
+        this.toast.success('Login successful! ');
         this.router.navigate(['/products']);
       },
       error: (err) => {

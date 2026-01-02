@@ -1,70 +1,66 @@
- <div class="max-w-4xl mx-auto mt-8 px-4">
-  
-  <div class="flex justify-between items-center mb-4">
-    <button
-      type="button"
-      (click)="router.navigate(['/products'])"
-      class="flex items-center gap-1 text-sm text-gray-600 hover:text-indigo-600 transition"
-    >
-      ← Back to Listings
-    </button>
+<div class="max-w-4xl mx-auto mt-8 px-4">
+      <div class="flex justify-between items-center mb-4">
+        <button
+          type="button"
+          (click)="router.navigate(['/products'])"
+          class="flex items-center gap-1 text-sm text-gray-600 hover:text-indigo-600 transition"
+        >
+          ← Back to Listings
+        </button>
 
-    <button 
-      *ngIf="productId && (initialProduct$ | async) as product"
-      type="button"
-      (click)="toggleStatus(product)"
-      [ngClass]="product.active ? 'bg-red-50 text-red-600 border-red-200' : 'bg-green-50 text-green-600 border-green-200'"
-      class="px-4 py-2 rounded-xl border font-bold text-[10px] uppercase tracking-widest transition-all hover:shadow-sm"
-    >
-      {{ product.active ? 'Deactivate Product' : 'Activate Product' }}
-    </button>
-  </div>
+        <button 
+          *ngIf="productId && (initialProduct$ | async) as product"
+          type="button"
+          (click)="toggleStatus(product)"
+          [ngClass]="product.active ? 'bg-red-50 text-red-600 border-red-200' : 'bg-green-50 text-green-600 border-green-200'"
+          class="px-4 py-2 rounded-xl border font-bold text-[10px] uppercase tracking-widest transition-all hover:shadow-sm"
+        >
+          {{ product.active ? 'Deactivate Product' : 'Activate Product' }}
+        </button>
+      </div>
 
-  <div class="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
-    
-    <div class="bg-gray-50 px-8 py-6 border-b border-gray-100">
-      <h1 class="text-3xl font-black text-gray-900">
-        {{ productId ? 'Edit Product' : 'Add New Product' }}
-      </h1>
-      <p class="text-gray-500 text-sm mt-1">
-        {{ productId ? 'Update the details for this item in your catalog.' : 'Fill in the information to list a new product.' }}
-      </p>
-    </div>
+      <div class="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
+        <div class="bg-gray-50 px-8 py-6 border-b border-gray-100">
+          <h1 class="text-3xl font-black text-gray-900">
+            {{ productId ? 'Edit Product' : 'Add New Product' }}
+          </h1>
+          <p class="text-gray-500 text-sm mt-1">
+            {{ productId ? 'Update the details for this item in your catalog.' : 'Fill in the information to list a new product.' }}
+          </p>
+        </div>
 
-    <div *ngIf="isLoading" class="flex flex-col justify-center items-center h-64">
-      <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-indigo-600"></div>
-      <p class="mt-4 font-bold text-gray-400 animate-pulse text-sm uppercase tracking-widest">
-        Fetching Product Data...
-      </p>
-    </div>
+        <div *ngIf="isLoading" class="flex flex-col justify-center items-center h-64">
+          <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-indigo-600"></div>
+          <p class="mt-4 font-bold text-gray-400 animate-pulse text-sm uppercase tracking-widest">
+            Processing...
+          </p>
+        </div>
 
-    <div *ngIf="!isLoading" class="p-8">
-      
-      <ng-container *ngIf="productId; else addNewBlock">
-        <product-form
-          *ngIf="initialProduct$ | async as productData"
-          [initialProduct]="productData"
-          (productSubmit)="handleFormSubmission($event)"
-        ></product-form>
-      </ng-container>
+        <div *ngIf="!isLoading" class="p-8">
+          <ng-container *ngIf="productId; else addNewBlock">
+            <product-form
+              *ngIf="initialProduct$ | async as productData"
+              [initialProduct]="productData"
+              (productSubmit)="handleFormSubmission($event)"
+            ></product-form>
+          </ng-container>
 
-      <ng-template #addNewBlock>
-        <product-form
-          (productSubmit)="handleFormSubmission($event)"
-        ></product-form>
-      </ng-template>
-    </div>
+          <ng-template #addNewBlock>
+            <product-form
+              (productSubmit)="handleFormSubmission($event)"
+            ></product-form>
+          </ng-template>
+        </div>
 
-    <div
-      *ngIf="errorMessage"
-      class="m-8 bg-red-50 border-l-4 border-red-500 text-red-700 px-6 py-4 rounded-r-xl"
-      role="alert"
-    >
-      <div class="flex items-center">
-        <span class="font-black mr-2">Error:</span>
-        <span>{{ errorMessage }}</span>
+        <div
+          *ngIf="errorMessage"
+          class="m-8 bg-red-50 border-l-4 border-red-500 text-red-700 px-6 py-4 rounded-r-xl"
+          role="alert"
+        >
+          <div class="flex items-center">
+            <span class="font-black mr-2">Error:</span>
+            <span>{{ errorMessage }}</span>
+          </div>
+        </div>
       </div>
     </div>
-
-  </div>
-</div>

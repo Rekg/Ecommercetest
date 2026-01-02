@@ -14,16 +14,16 @@ export class ToastNotification implements OnInit {
 
   ngOnInit() {
     this.toastService.toasts$.subscribe((toast) => {
-      // Logic to handle toast visibility and removal
+      
       const existingToastIndex = this.activeToasts.findIndex((t) => t.id === toast.id);
 
       if (toast.message === '') {
-        // This is a removal signal
+        
         if (existingToastIndex > -1) {
           this.activeToasts.splice(existingToastIndex, 1);
         }
       } else {
-        // This is a show signal
+       
         if (existingToastIndex === -1) {
           this.activeToasts.push(toast);
         }

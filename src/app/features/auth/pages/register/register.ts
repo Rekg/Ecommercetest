@@ -29,7 +29,7 @@ export class RegisterComponent {
     this.isLoading.set(true);
     this.authService.register(this.regData).subscribe({
       next: () => {
-        this.toast.success('Registration successful! Please login. 🎉');
+        this.toast.success('Registration successful! Please login. ');
         this.router.navigate(['/auth/login']);
       },
       error: (err) => {

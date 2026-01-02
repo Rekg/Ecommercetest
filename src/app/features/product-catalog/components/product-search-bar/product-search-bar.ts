@@ -7,15 +7,15 @@ import { ProductFilterService } from '../../services/product-filter.service';
   selector: 'app-product-search-bar',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './product-search-bar.html',
+  templateUrl: './product-search-bar.html',   
 })
 export class ProductSearchBarComponent implements OnInit {
-  // Changed to public so the HTML template can see filterService.showFilters()
+  
   public filterService = inject(ProductFilterService);
   query = '';
 
   ngOnInit() {
-    // Keep the input in sync if filters are cleared from elsewhere
+    
     this.filterService.filters$.subscribe(f => this.query = f.searchTerm);
   }
 
@@ -24,7 +24,7 @@ export class ProductSearchBarComponent implements OnInit {
   }
 
   toggle() {
-    // Toggles the signal we added to the service
+   
     this.filterService.toggleFilters();
   }
 }

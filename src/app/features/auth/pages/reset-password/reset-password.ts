@@ -22,7 +22,7 @@ export class ResetPasswordComponent implements OnInit {
   isLoading = signal(false);
 
   ngOnInit() {
-    // Automatically grab the token from the URL: ?token=xyz
+    
     this.token = this.route.snapshot.queryParamMap.get('token') || '';
     
     if (!this.token) {
@@ -44,7 +44,7 @@ export class ResetPasswordComponent implements OnInit {
 
     this.isLoading.set(true);
     
-    // Payload matches standard reset flows
+    
     const resetData = {
       token: this.token,
       newPassword: this.password

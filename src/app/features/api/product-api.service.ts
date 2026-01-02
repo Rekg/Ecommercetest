@@ -54,11 +54,7 @@ export class ProductApiService {
     return this.http.delete<void>(`${this.baseUrl}/products/${id}`);
   }
 
-  /**
-   * SMOKING GUN FIX: 
-   * Added { responseType: 'text' } because the server returns a raw string path
-   * like "/uploads/products/image.jpg" instead of a JSON object.
-   */
+  
   
 
   toggleProductStatus(id: number, active: boolean): Observable<Product> {
@@ -73,7 +69,7 @@ export class ProductApiService {
     });
   }
 
-  // FIXED: Ensure multiple upload returns an array of strings
+  
   uploadImages(files: FileList): Observable<string[]> {
     const formData = new FormData();
     Array.from(files).forEach(file => formData.append('files', file));

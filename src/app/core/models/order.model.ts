@@ -23,13 +23,13 @@ export interface Order {
   status: 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
   createdAt: string;
   totalAmount: number;
-  shippingAddress: any; // Can be string or object from server
+  shippingAddress: any; 
   billingAddress: any;
 }
 
 export interface OrderRequest {
   cartItemIds: number[];
-  shippingAddress: string; // Changed from Object to String
-  billingAddress: string;  // Changed from Object to String
+  shippingAddress: string; 
+  billingAddress: string;  
   paymentMethod: string;
 }

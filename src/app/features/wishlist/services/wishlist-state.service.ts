@@ -88,7 +88,7 @@ interface WishlistItem extends Product {}
 })
 export class WishlistStateService {
   private toastService = inject(ToastService); 
-  // private store = inject(Store); // Muted to prevent Redux errors during cleanup
+  // private store = inject(Store); // Muted to prevent state errors 
 
   private wishlistSubject = new BehaviorSubject<WishlistItem[]>([]);
   public wishlist$ = this.wishlistSubject.asObservable();
@@ -109,7 +109,7 @@ export class WishlistStateService {
       this.toastService.info(`💔 "${product.name}" removed from wishlist.`);
     } else {
       this.wishlistSubject.next([...currentItems, { ...product }]);
-      this.toastService.success(`💖 "${product.name}" added to wishlist!`);
+      this.toastService.success(` "${product.name}" added to wishlist!`);
     }
   }
 

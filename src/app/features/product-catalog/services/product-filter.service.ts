@@ -18,11 +18,10 @@ export class ProductFilterService {
   private criteriaSubject = new BehaviorSubject<FilterCriteria>(this.defaultCriteria);
   filters$ = this.criteriaSubject.asObservable();
 
-  // Inside ProductFilterService updateFilters()
+  
   updateFilters(updates: Partial<FilterCriteria>) {
   this.criteriaSubject.next({ ...this.criteriaSubject.value, ...updates });
-  // Optional: Close sidebar on mobile when a filter is picked
-  // if (window.innerWidth < 1024) this.showFilters.set(false);
+  
 }
 
   clearFilters() {

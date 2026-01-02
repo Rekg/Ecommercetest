@@ -1,4 +1,3 @@
-// src/app/core/services/auth.service.ts
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
@@ -26,7 +25,7 @@ export class AuthService {
   }
 
   register(userData: any): Observable<any> {
-    // Keeping your DB structure: sending firstName and lastName separately
+    
     const payload = {
       email: userData.email,
       password: userData.password,
@@ -37,7 +36,7 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/register`, payload);
   }
 
-  // Functional placeholders for your Reset flow
+  
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/forgot-password`, { email });
   }

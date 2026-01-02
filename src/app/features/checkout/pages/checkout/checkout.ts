@@ -71,7 +71,7 @@ export class CheckoutPage {
 
   
 
-  // Change this to a cleaner format without commas to see if it fixes the 400 error
+  
 private formatAddressString(addr: any): string {
   if (!addr) return '';
   return `${addr.street} ${addr.city} ${addr.state} ${addr.zip} ${addr.country}`;

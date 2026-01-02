@@ -15,7 +15,7 @@ export class PersonalInfoComponent {
 
   isEditing = signal(false);
   
-  // Initialize with current user data
+  
   profileData = {
     firstName: this.authService.currentUser()?.firstName || '',
     lastName: this.authService.currentUser()?.lastName || '',
@@ -23,11 +23,10 @@ export class PersonalInfoComponent {
   };
 
   saveProfile() {
-    // For now, we simulate a successful save
+    
     this.toast.success('Profile updated successfully!');
     this.isEditing.set(false);
     
-    // Note: When you have the PUT /api/users/profile endpoint, 
-    // you would call it here.
+    
   }
 }

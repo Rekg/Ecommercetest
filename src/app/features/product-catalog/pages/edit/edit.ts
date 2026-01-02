@@ -24,17 +24,16 @@ import { Title } from '@angular/platform-browser';
   imports: [CommonModule, ProductForm, RouterModule],
   templateUrl: './edit.html',
 })
-export class edit implements OnInit {
+export class EditComponent implements OnInit {
   private apiService = inject(ProductApiService);
   private route = inject(ActivatedRoute);
-  public router = inject(Router); 
+  public router = inject(Router);
   private toastService = inject(ToastService);
   private titleService = inject(Title);
 
   productId: number | null = null;
   isLoading = false;
   errorMessage: string | null = null;
-
   initialProduct$ = new BehaviorSubject<Product | null>(null);
 
   ngOnInit(): void {
@@ -53,39 +52,44 @@ export class edit implements OnInit {
   }
 
   loadProductForEditing(id: number): Observable<Product | null> {
-  this.isLoading = true;
-  return this.apiService.getProductById(id).pipe(
-    // We use delay(0) to push the emission to the next JavaScript turn
-    // This ensures the [initialProduct] input is caught by ngOnChanges
-    tap((product: Product) => {
-      const mappedProduct = {
-        ...product,
-        categoryId: product.categoryId || 1 
-      };
-      this.initialProduct$.next(null); // Clear first to trigger a fresh change
-      this.initialProduct$.next(mappedProduct);
-    }),
-    finalize(() => (this.isLoading = false))
-  );
-}
+    this.isLoading = true;
+    return this.apiService.getProductById(id).pipe(
+      tap((product: Product) => {
+        const mappedProduct: Product = {
+          ...product,
+          categoryId: product.categoryId || 1,
+        };
+        this.initialProduct$.next(null); 
+        this.initialProduct$.next(mappedProduct);
+      }),
+      catchError(() => {
+        this.errorMessage = 'Could not fetch product details.';
+        return of(null);
+      }),
+      finalize(() => (this.isLoading = false))
+    );
+  }
 
   toggleStatus(product: Product): void {
     if (!this.productId) return;
-    
+
     const newStatus = !product.active;
+
     this.apiService.toggleProductStatus(this.productId, newStatus).subscribe({
       next: (updatedProduct) => {
         this.initialProduct$.next(updatedProduct);
-        this.toastService.success(`Product ${updatedProduct.active ? 'Activated' : 'Deactivated'} successfully`);
+        this.toastService.success(
+          `Product ${updatedProduct.active ? 'Activated' : 'Deactivated'} successfully`
+        );
       },
-      error: () => this.toastService.error('Failed to change product status')
+      error: () => this.toastService.error('Failed to change product status'),
     });
   }
 
   handleFormSubmission(formData: any): void {
     this.isLoading = true;
-  
-    // Map the form data to the ProductRequest interface
+    this.errorMessage = null;
+
     const productRequest: ProductRequest = {
       name: formData.name,
       description: formData.description,
@@ -108,14 +112,14 @@ export class edit implements OnInit {
         catchError((error) => {
           const action = this.productId ? 'update' : 'add';
           this.errorMessage = error.message || `Failed to ${action} product.`;
-          this.toastService.error(`❌ Operation failed!`);
+          this.toastService.error(' Operation failed!');
           return of(null);
         })
       )
       .subscribe((response) => {
         if (response) {
           const action = this.productId ? 'updated' : 'added';
-          this.toastService.success(`🎉 Product successfully ${action}!`);
+          this.toastService.success(` Product successfully ${action}!`);
           this.router.navigate(['/products']);
         }
       });

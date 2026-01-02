@@ -1,7 +1,7 @@
 export interface FilterCriteria {
   searchTerm: string;
-  categoryId: number | null;     // For UI highlight
-  categoryName: string | null;   // For Backend API
+  categoryId: number | null;     
+  categoryName: string | null;   
   minPrice: number | null;
   maxPrice: number | null;
   sortBy: string;

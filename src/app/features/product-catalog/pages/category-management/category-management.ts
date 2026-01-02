@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router'; // Added for the back link
+import { RouterModule } from '@angular/router'; 
 import { ProductApiService } from '../../../api/product-api.service';
 import { Category } from '../../../../core/models/product.model';
 import { ToastService } from '../../../../core/services/toast.service';

@@ -27,15 +27,14 @@ export class CardComponent implements OnInit {
     this.isInWishlist$ = this.wishlistService.isProductInWishlist(this.product.id);
   }
 
-  // src/app/features/product-catalog/components/card/card.ts
+  
 
 getFullImageUrl(path: string | null): string {
   if (!path) return 'assets/images/placeholder-product.png';
   if (path.startsWith('http') || path.startsWith('assets/')) return path;
-
-  // Match the detail page exactly: use the full apiUrl (with /api/v1)
-  // path already starts with / (e.g., /uploads/...)
+  
   return environment.apiUrl + path;
+  
 }
 
   quickAddToCart(event: Event): void {

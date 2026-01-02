@@ -15,12 +15,12 @@ export const PRODUCT_CATALOG_ROUTES: Routes = [
   {
     path: 'add',
     canActivate: [adminGuard],
-    loadComponent: () => import('./pages/edit/edit').then((m) => m.edit), // Keep m.edit if you didn't rename it yet
+    loadComponent: () => import('./pages/edit/edit').then((m) => m.EditComponent), // Keep m.edit if you didn't rename it yet
   },
   {
     path: 'edit/:id',
     canActivate: [adminGuard],
-    loadComponent: () => import('./pages/edit/edit').then((m) => m.edit),
+    loadComponent: () => import('./pages/edit/edit').then((m) => m.EditComponent),
   },
   {
     path: ':id',
