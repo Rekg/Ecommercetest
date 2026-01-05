@@ -1,39 +1,64 @@
 <div class="container mx-auto p-6">
-      <div class="mb-4">
-        <a [routerLink]="['/products']" class="text-indigo-600 hover:text-indigo-800 font-bold flex items-center gap-2 transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          Back to Listings
-        </a>
-      </div>
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-black text-gray-900">Category Management</h1>
+    <button (click)="addCategory()" class="bg-[#0D1D41] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#00C3C2] shadow-lg transition">
+      + Add Category
+    </button>
+  </div>
+  
+  <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+    <table class="w-full text-left">
+      <tbody>
+        <tr *ngFor="let cat of categories()" class="border-b border-gray-50 hover:bg-gray-50 transition">
+          <td class="p-4 font-bold text-gray-800">{{ cat.name }}</td>
+          <td class="p-4 text-gray-500 italic">{{ cat.description || 'No description provided' }}</td>
+          <td class="p-4 text-right space-x-2">
+            <button (click)="editCategory(cat)" class="text-amber-600 font-bold px-3 py-1 hover:bg-amber-50 rounded-lg">Edit</button>
+            <button (click)="deleteCategory(cat.id)" class="text-red-600 font-bold px-3 py-1 hover:bg-red-50 rounded-lg">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
-      <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-black text-gray-900">Category Management</h1>
-        <button (click)="addCategory()" class="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-lg transition">
-          + Add Category
-        </button>
-      </div>
+<div *ngIf="isModalOpen()" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+  <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" (click)="closeModal()"></div>
+  
+  <div class="relative bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden p-8 animate-in fade-in zoom-in duration-300">
+    
+    <div class="mb-6">
+      <h3 class="text-2xl font-black text-gray-900">
+        {{ modalMode() === 'delete' ? 'Are you sure?' : (modalMode() === 'add' ? 'Add New Category' : 'Edit Category') }}
+      </h3>
+      <p class="text-gray-500 text-sm mt-1">
+        {{ modalMode() === 'delete' ? 'This action might affect products listed under this category.' : 'Please fill in the details below.' }}
+      </p>
+    </div>
 
-      <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-        <table class="w-full text-left">
-          <thead class="bg-gray-50 border-b border-gray-100">
-            <tr>
-              <th class="p-4 font-black text-gray-400 uppercase text-xs">Name</th>
-              <th class="p-4 font-black text-gray-400 uppercase text-xs">Description</th>
-              <th class="p-4 font-black text-gray-400 uppercase text-xs text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let cat of categories()" class="border-b border-gray-50 hover:bg-gray-50 transition">
-              <td class="p-4 font-bold text-gray-800">{{ cat.name }}</td>
-              <td class="p-4 text-gray-500 italic">{{ cat.description || 'No description provided' }}</td>
-              <td class="p-4 text-right space-x-2">
-                <button (click)="editCategory(cat)" class="text-amber-600 font-bold px-3 py-1 hover:bg-amber-50 rounded-lg">Edit</button>
-                <button (click)="deleteCategory(cat.id)" class="text-red-600 font-bold px-3 py-1 hover:bg-red-50 rounded-lg">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <div *ngIf="modalMode() !== 'delete'" class="space-y-4">
+      <div>
+        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Category Name</label>
+        <input [(ngModel)]="currentCategory().name" type="text" class="w-full mt-1 px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="e.g. Electronics">
+      </div>
+      <div>
+        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Description (Optional)</label>
+        <textarea [(ngModel)]="currentCategory().description" rows="3" class="w-full mt-1 px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none resize-none" placeholder="Short description..."></textarea>
       </div>
     </div>
+
+    <div class="flex gap-3 mt-8">
+      <button (click)="closeModal()" class="flex-1 px-6 py-3 bg-gray-100 text-gray-600 font-bold rounded-xl hover:bg-gray-200 transition">
+        Cancel
+      </button>
+      <button 
+        (click)="confirmAction()" 
+        [disabled]="modalMode() !== 'delete' && !currentCategory().name"
+        [class.bg-red-600]="modalMode() === 'delete'"
+        [class.bg-indigo-600]="modalMode() !== 'delete'"
+        class="flex-1 px-6 py-3 text-white font-bold rounded-xl shadow-lg transition disabled:opacity-50">
+        {{ modalMode() === 'delete' ? 'Yes, Delete' : 'Confirm' }}
+      </button>
+    </div>
+  </div>
+</div>
