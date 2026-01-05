@@ -21,12 +21,12 @@ export class ProductFiltersComponent implements OnInit {
   maxVal: number | null = null;
 
   ngOnInit() {
-    this.api.getCategories().subscribe(res => {
-      const cats = Array.isArray(res) ? res : (res?.content || []);
+    this.api.getCategories().subscribe((res) => {
+      const cats = Array.isArray(res) ? res : res?.content || [];
       this.categories.set(cats);
     });
 
-    this.fs.filters$.subscribe(f => {
+    this.fs.filters$.subscribe((f) => {
       this.activeId = f.categoryId;
       this.activeOrder = f.sortOrder;
       this.minVal = f.minPrice;
@@ -47,5 +47,7 @@ export class ProductFiltersComponent implements OnInit {
     this.fs.updateFilters({ sortBy: 'name', sortOrder: dir });
   }
 
-  reset() { this.fs.clearFilters(); }
+  reset() {
+    this.fs.clearFilters();
+  }
 }
