@@ -1,53 +1,79 @@
 <div class="group relative bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition overflow-hidden flex flex-col h-full">
-      <div *ngIf="product.lowStock" 
-           class="absolute top-3 left-3 z-10 bg-orange-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase shadow-sm">
-        Low Stock
-      </div>
+  <div *ngIf="product.lowStock"
+       class="absolute top-3 left-3 z-10 bg-orange-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase shadow-sm">
+    Low Stock
+  </div>
+
+  <button
+    type="button"
+    (click)="toggleWishlist($event)"
+    class="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/80 backdrop-blur hover:scale-110 transition shadow-sm"
+  >
+    <img
+      [src]="(isInWishlist$ | async) ? 'icons/heart-liked.png' : '/icons/heart.png'"
+      alt="Wishlist"
+      class="w-5 h-5"
+    />
+  </button>
+
+  <a [routerLink]="['/products', product.id]">
+    <div class="h-44 flex items-center justify-center p-4 bg-gray-50 overflow-hidden">
+      <img
+        [src]="getFullImageUrl(product.imageUrl)"
+        [alt]="product.name"
+        width="300"
+        height="300"
+        class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+        priority
+      />
+    </div>
+  </a>
+
+  <div class="p-4 flex flex-col flex-grow gap-2">
+    <span class="text-xs font-semibold uppercase text-indigo-500">
+      {{ product.categoryName }}
+    </span>
+
+    <h3 class="text-sm font-semibold text-gray-800 line-clamp-2 h-10">
+      {{ product.name }}
+    </h3>
+
+    <div class="flex items-baseline gap-2 mt-auto">
+      <span class="text-lg font-bold text-gray-900">
+        ETB {{ product.price | number : '1.2-2' }}
+      </span>
+      <span class="text-[10px] text-gray-400">
+        ({{ product.stockQuantity }} in stock)
+      </span>
+    </div>
+
+    <div class="flex gap-2 pt-3 border-t">
+      <a
+        [routerLink]="['/products', product.id]"
+        class="flex-1 h-10 inline-flex items-center justify-center bg-gray-100 text-gray-800 text-sm font-medium rounded-lg hover:bg-gray-200 transition">
+        View
+      </a>
 
       <button
         type="button"
-        (click)="toggleWishlist($event)"
-        class="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/80 backdrop-blur hover:scale-110 transition shadow-sm"
-        [ngClass]="{
-          'text-red-500': (isInWishlist$ | async),
-          'text-gray-400': !(isInWishlist$ | async)
-        }"
-      >
-        <span class="text-lg">{{ (isInWishlist$ | async) ? '❤️' : '🤍' }}</span>
+        (click)="quickAddToCart($event)"
+        [disabled]="product.stockQuantity <= 0"
+        class="h-10 w-10 flex items-center justify-center bg-[#0D1D41] text-white rounded-lg hover:bg-[#00C3C2] transition shadow disabled:bg-gray-300">
+
+        <img
+          *ngIf="product.stockQuantity > 0"
+          src="icons/shopping-cart.png"
+          alt="Add to cart"
+          class="w-5 h-5"
+        />
+
+        <img
+          *ngIf="product.stockQuantity <= 0"
+          src="icons/close.png"
+          alt="Out of stock"
+          class="w-5 h-5"
+        />
       </button>
-
-      <a [routerLink]="['/products', product.id]">
-        <div class="h-44 flex items-center justify-center p-4 bg-gray-50 overflow-hidden">
-          <img
-            [src]="getFullImageUrl(product.imageUrl)"
-            [alt]="product.name"
-            width="300"
-            height="300"
-            class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
-            priority
-          />
-        </div>
-      </a>
-
-      <div class="p-4 flex flex-col flex-grow gap-2">
-        <span class="text-xs font-semibold uppercase text-indigo-500">{{ product.categoryName }}</span>
-        <h3 class="text-sm font-semibold text-gray-800 line-clamp-2 h-10">{{ product.name }}</h3>
-        <div class="flex items-baseline gap-2 mt-auto">
-           <span class="text-lg font-bold text-gray-900">ETB {{ product.price | number : '1.2-2' }}</span>
-           <span class="text-[10px] text-gray-400">({{ product.stockQuantity }} in stock)</span>
-        </div>
-        <div class="flex gap-2 pt-3 border-t">
-          <a [routerLink]="['/products', product.id]"
-             class="flex-1 h-10 inline-flex items-center justify-center bg-gray-100 text-gray-800 text-sm font-medium rounded-lg hover:bg-gray-200 transition">
-            View
-          </a>
-          <button
-            type="button"
-            (click)="quickAddToCart($event)"
-            [disabled]="product.stockQuantity <= 0"
-            class="h-10 w-10 flex items-center justify-center bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition shadow disabled:bg-gray-300">
-            {{ product.stockQuantity <= 0 ? '❌' : '🛒' }}
-          </button>
-        </div>
-      </div>
     </div>
+  </div>
+</div>
