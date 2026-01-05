@@ -37,7 +37,7 @@
             <button
               type="submit"
               [disabled]="productForm.invalid || isUploading"
-              class="w-full py-4 text-sm font-bold text-white bg-indigo-600 rounded-2xl hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition disabled:opacity-50"
+              class="w-full py-4 text-sm font-bold text-white bg-[#0B1024] rounded-2xl hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition disabled:opacity-50"
             >
               {{
                 isUploading
@@ -53,31 +53,23 @@
     </div>
 
     <div class="flex-grow space-y-6 order-1 lg:order-2 w-full">
-      <div
-        class="bg-white p-6 md:p-8 rounded-3xl border-2 border-dashed border-gray-200 text-center"
-      >
+      <div class="bg-white p-6 md:p-8 rounded-3xl border-2 border-dashed border-gray-200 text-center">
         <label class="cursor-pointer block">
           <div class="flex flex-col items-center justify-center">
             <div class="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center mb-3">
-              <svg
-                class="h-6 w-6 text-indigo-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-width="2"
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                />
+              <svg class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
               </svg>
             </div>
-            <span class="bg-indigo-600 text-white px-8 py-2 rounded-full font-bold text-sm mb-2"
-              >Upload Photo</span
-            >
+            <span class="bg-[#0B1024] text-white px-8 py-2 rounded-full font-bold text-sm mb-2">Upload Photo</span>
             <p class="text-gray-900 font-bold text-sm">Drop images here or click to browse</p>
           </div>
           <input type="file" (change)="onFileSelected($event)" accept="image/*" class="hidden" />
         </label>
+        
+        <div class="mt-4">
+          <input type="text" formControlName="imageUrl" class="block w-full border border-gray-300 rounded-xl shadow-sm p-2 text-xs bg-gray-50" placeholder="Manual Path" />
+        </div>
       </div>
 
       <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100">
@@ -86,27 +78,17 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div class="space-y-1">
             <label class="text-xs font-bold text-gray-500 uppercase">Product Name</label>
-            <input
-              formControlName="name"
-              placeholder="Items Name"
-              class="w-full h-[50px] px-4 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50/30"
-            />
+            <input formControlName="name" placeholder="Items Name" class="w-full h-[50px] px-4 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50/20" />
           </div>
+          
           <div class="space-y-1">
             <label class="text-xs font-bold text-gray-500 uppercase">Category</label>
             <div class="flex items-center gap-2 w-full">
-              <select
-                formControlName="categoryId"
-                class="flex-1 h-[50px] px-4 rounded-xl border border-gray-200 bg-gray-50/30 outline-none appearance-none cursor-pointer min-w-0"
-              >
+              <select formControlName="categoryId" class="flex-1 h-[50px] px-4 rounded-xl border border-gray-200 bg-gray-50/30 outline-none appearance-none cursor-pointer min-w-0">
                 <option [value]="null">Choose a category</option>
                 <option *ngFor="let cat of categories()" [value]="cat.id">{{ cat.name }}</option>
               </select>
-              <button
-                (click)="onQuickAddCategory()"
-                type="button"
-                class="h-[50px] w-[50px] flex items-center justify-center bg-indigo-50 text-indigo-600 rounded-xl font-bold text-2xl hover:bg-indigo-100 transition flex-shrink-0 border border-indigo-100"
-              >
+              <button (click)="onQuickAddCategory()" type="button" class="h-[50px] w-[50px] flex items-center justify-center bg-indigo-50 text-indigo-600 rounded-xl font-bold text-2xl hover:bg-indigo-100 transition flex-shrink-0 border border-indigo-100">
                 +
               </button>
             </div>
@@ -116,27 +98,15 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div class="space-y-1">
             <label class="text-xs font-bold text-gray-500 uppercase">Price (ETB)</label>
-            <input
-              type="number"
-              formControlName="price"
-              class="w-full h-[50px] px-4 rounded-xl border border-gray-200 bg-gray-50/30 outline-none"
-            />
+            <input type="number" formControlName="price" class="w-full h-[50px] px-4 rounded-xl border border-gray-200 bg-gray-50/30 outline-none" />
           </div>
           <div class="space-y-1">
             <label class="text-xs font-bold text-gray-500 uppercase">Stock</label>
-            <input
-              type="number"
-              formControlName="stockQuantity"
-              class="w-full h-[50px] px-4 rounded-xl border border-gray-200 bg-gray-50/30 outline-none"
-            />
+            <input type="number" formControlName="stockQuantity" class="w-full h-[50px] px-4 rounded-xl border border-gray-200 bg-gray-50/30 outline-none" />
           </div>
           <div class="space-y-1">
             <label class="text-xs font-bold text-gray-500 uppercase">Weight</label>
-            <input
-              formControlName="weight"
-              placeholder="Gm & kg"
-              class="w-full h-[50px] px-4 rounded-xl border border-gray-200 bg-gray-50/30 outline-none"
-            />
+            <input formControlName="weight" placeholder="Gm & kg" class="w-full h-[50px] px-4 rounded-xl border border-gray-200 bg-gray-50/30 outline-none" />
           </div>
         </div>
 
@@ -164,9 +134,7 @@
         <div class="mb-8">
           <label class="text-xs font-bold text-gray-500 uppercase block mb-3">Color</label>
           <div class="flex items-center gap-4">
-            <div
-              class="relative w-12 h-12 rounded-xl overflow-hidden border border-gray-200 shadow-sm flex-shrink-0"
-            >
+            <div class="relative w-12 h-12 rounded-xl overflow-hidden border border-gray-200 shadow-sm flex-shrink-0">
               <input
                 type="color"
                 formControlName="color"
@@ -183,12 +151,7 @@
 
         <div class="space-y-1">
           <label class="text-xs font-bold text-gray-500 uppercase">Description</label>
-          <textarea
-            formControlName="description"
-            rows="3"
-            placeholder="Short description about the product"
-            class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/30 outline-none resize-none"
-          ></textarea>
+          <textarea formControlName="description" rows="3" placeholder="Short description about the product" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/30 outline-none resize-none"></textarea>
         </div>
       </div>
     </div>
