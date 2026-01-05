@@ -47,7 +47,7 @@ export class AuthService {
 
   logout() {
     const token = this.getToken();
-    if (window.confirm('Are you sure you want to logout?')) {
+    
       if (token) {
         this.http.post(`${this.baseUrl}/logout`, { token }, { responseType: 'text' })
           .subscribe({
@@ -56,7 +56,7 @@ export class AuthService {
           });
       } else {
         this.handleLogoutCleanup();
-      }
+      
     }
   }
 
