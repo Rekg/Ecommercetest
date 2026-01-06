@@ -17,16 +17,14 @@
   </button>
 
   <a [routerLink]="['/products', product.id]">
-    <div class="h-44 flex items-center justify-center p-4 bg-gray-50 overflow-hidden">
-      <img
-        [src]="getFullImageUrl(product.imageUrl)"
-        [alt]="product.name"
-        width="300"
-        height="300"
-        class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
-        priority
-      />
-    </div>
+   <div class="h-44 flex items-center justify-center bg-gray-50 overflow-hidden">
+  <img
+    [src]="getFullImageUrl(product.imageUrl)"
+    [alt]="product.name"
+    class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
+    priority
+  />
+</div>
   </a>
 
   <div class="p-4 flex flex-col flex-grow gap-2">

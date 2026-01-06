@@ -12,7 +12,7 @@
         </div>
         
         <button (click)="reorderItems(order)" 
-                class="px-8 py-4 bg-gray-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-600 transition shadow-xl active:scale-95">
+                class="px-8 py-4 bg-gray-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#0D1D41] transition shadow-xl active:scale-95">
           Reorder All Items
         </button>
       </div>
@@ -23,7 +23,7 @@
           
           <div *ngFor="let s of statuses" class="flex flex-col items-center relative z-10">
             <div [class]="'w-10 h-10 rounded-full flex items-center justify-center text-sm font-black transition-all duration-500 ' + 
-                 (isCompleted(order.status, s) ? 'bg-indigo-600 text-white shadow-lg' : 'bg-white border-4 border-gray-100 text-gray-300')">
+                 (isCompleted(order.status, s) ? 'bg-[#0D1D41] text-white shadow-lg' : 'bg-white border-4 border-gray-100 text-gray-300')">
               <span *ngIf="isCompleted(order.status, s)">✓</span>
               <span *ngIf="!isCompleted(order.status, s)">•</span>
             </div>
@@ -64,7 +64,7 @@
         </div>
 
         <div class="flex flex-col gap-8">
-          <div class="bg-indigo-900 text-white p-8 rounded-[2.5rem] shadow-xl relative overflow-hidden flex-1">
+          <div class="bg-[#0D1D41] text-white p-8 rounded-[2.5rem] shadow-xl relative overflow-hidden flex-1">
             <h3 class="font-black mb-6 uppercase text-[10px] tracking-widest text-indigo-300">Delivery Information</h3>
             <div class="space-y-2 mb-8 relative z-10">
               <p class="font-bold text-lg leading-relaxed text-indigo-50 italic">
@@ -79,7 +79,7 @@
               </button>
             </div>
 
-            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-indigo-800 rounded-full blur-3xl opacity-50"></div>
+            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-[#0D1D41] rounded-full blur-3xl opacity-50"></div>
           </div>
         </div>
       </div>

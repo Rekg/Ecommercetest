@@ -81,8 +81,8 @@ import { environment } from '../../../../../environments/environment';
             <button
               (click)="addToCart()"
               [disabled]="product.stockQuantity <= 0"
-              class="w-full bg-indigo-600 text-white py-5 rounded-2xl font-black uppercase text-xs tracking-widest
-                     hover:bg-indigo-700 transition-all shadow-xl active:scale-95
+              class="w-full bg-[#0D1D41] text-white py-5 rounded-2xl font-black uppercase text-xs tracking-widest
+                     hover:bg-[#0B1024]transition-all shadow-xl active:scale-95
                      disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none disabled:active:scale-100"
             >
               Add to Cart

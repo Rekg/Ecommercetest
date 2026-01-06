@@ -33,6 +33,8 @@ export class CartPage {
   totals$ = this.store.select(selectCartTotals);
 
   isProcessing = signal(false);
+  // Signal to control modal visibility
+  showClearCartModal = signal(false);
 
   updateQuantity(item: CartItem, newQuantity: number | string): void {
     const quantity = Number(newQuantity);
@@ -57,22 +59,28 @@ export class CartPage {
     this.store.dispatch(CartActions.removeFromCartRequest({ productId: cartItemId }));
   }
 
+  
   clearCart(): void {
-    if (confirm('Are you sure you want to empty your cart?')) {
+    this.showClearCartModal.set(true);
+  }
+
+  
+  handleClearCartResponse(confirmed: boolean): void {
+    this.showClearCartModal.set(false);
+    if (confirmed) {
       this.store.dispatch(CartActions.clearCartRequest());
     }
   }
 
   onCheckout() {
-  let currentItems: CartItem[] = [];
-  this.items$.subscribe(items => currentItems = items).unsubscribe();
+    let currentItems: CartItem[] = [];
+    this.items$.subscribe(items => currentItems = items).unsubscribe();
 
-  if (currentItems.length === 0) {
-    this.toastService.error('Your cart is empty!');
-    return;
+    if (currentItems.length === 0) {
+      this.toastService.error('Your cart is empty!');
+      return;
+    }
+
+    this.router.navigate(['/checkout']);
   }
-
-  
-  this.router.navigate(['/checkout']);
-}
 }
